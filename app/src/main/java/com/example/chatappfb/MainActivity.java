@@ -10,6 +10,7 @@ import androidx.viewpager2.widget.ViewPager2;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
 import android.view.MenuItem;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -35,10 +36,11 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        //check account
         mAuth = FirebaseAuth.getInstance();
         currentUser = mAuth.getCurrentUser();
         mToolbar= (Toolbar) findViewById(R.id.main_page_toolbar);
-
+        setSupportActionBar(mToolbar);
         mybottomNavigationView= findViewById(R.id.bottom_navigation);
         getSupportFragmentManager().beginTransaction().replace(R.id.container,chatsFragment).commit();
         mybottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
@@ -75,5 +77,31 @@ public class MainActivity extends AppCompatActivity {
     private void SendUserToLoginActivity() {
         Intent loginIntent = new Intent(MainActivity.this, LoginFActivity.class);
         startActivity(loginIntent);
+    }
+
+//Tạo sub-menu để thêm lựa chọn
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        super.onCreateOptionsMenu(menu);
+        getMenuInflater().inflate(R.menu.sub_menu_1, menu);
+        return true;
+    }
+//Đặt vị trí sub-menu
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+         super.onOptionsItemSelected(item);
+        if(item.getItemId()==R.id.main_logout_option){
+            mAuth.signOut();
+            Intent loginIntent1 = new Intent(MainActivity.this, LoginFActivity.class);
+            startActivity(loginIntent1);
+        }
+         if(item.getItemId()==R.id.main_find_friends_option){
+
+         }
+        if(item.getItemId()==R.id.main_settings_option){
+
+        }
+
+        return true;
     }
 }
